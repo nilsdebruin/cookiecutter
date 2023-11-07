@@ -54,14 +54,12 @@ def find_hook(hook_name, hooks_dir='hooks'):
         logger.debug('No hooks/dir in template_dir')
         return None
 
-    scripts = []
-    for hook_file in os.listdir(hooks_dir):
-        if valid_hook(hook_file, hook_name):
-            scripts.append(os.path.abspath(os.path.join(hooks_dir, hook_file)))
-
-    if len(scripts) == 0:
-        return None
-    return scripts
+    scripts = [
+        os.path.abspath(os.path.join(hooks_dir, hook_file))
+        for hook_file in os.listdir(hooks_dir)
+        if valid_hook(hook_file, hook_name)
+    ]
+    return None if not scripts else scripts
 
 
 def run_script(script_path, cwd='.'):

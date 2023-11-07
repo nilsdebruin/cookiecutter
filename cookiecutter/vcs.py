@@ -38,13 +38,12 @@ def identify_repo(repo_url):
             return repo_type, repo_url_values[1]
         else:
             raise UnknownRepoType
+    elif 'git' in repo_url:
+        return 'git', repo_url
+    elif 'bitbucket' in repo_url:
+        return 'hg', repo_url
     else:
-        if 'git' in repo_url:
-            return 'git', repo_url
-        elif 'bitbucket' in repo_url:
-            return 'hg', repo_url
-        else:
-            raise UnknownRepoType
+        raise UnknownRepoType
 
 
 def is_vcs_installed(repo_type):
