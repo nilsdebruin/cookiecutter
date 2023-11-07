@@ -14,28 +14,25 @@ def context_data():
 
     Return ('input_params, expected_context') tuples.
     """
-    context = (
+    yield (
         {'context_file': 'tests/test-generate-context/test.json'},
         {'test': {'1': 2, 'some_key': 'some_val'}},
     )
-
-    context_with_default = (
+    yield (
         {
             'context_file': 'tests/test-generate-context/test.json',
             'default_context': {'1': 3},
         },
         {'test': {'1': 3, 'some_key': 'some_val'}},
     )
-
-    context_with_extra = (
+    yield (
         {
             'context_file': 'tests/test-generate-context/test.json',
             'extra_context': {'1': 4},
         },
         {'test': {'1': 4, 'some_key': 'some_val'}},
     )
-
-    context_with_default_and_extra = (
+    yield (
         {
             'context_file': 'tests/test-generate-context/test.json',
             'default_context': {'1': 3},
@@ -43,11 +40,6 @@ def context_data():
         },
         {'test': {'1': 5, 'some_key': 'some_val'}},
     )
-
-    yield context
-    yield context_with_default
-    yield context_with_extra
-    yield context_with_default_and_extra
 
 
 @pytest.mark.usefixtures('clean_system')

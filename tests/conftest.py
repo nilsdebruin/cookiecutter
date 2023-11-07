@@ -49,11 +49,8 @@ def restore_backup_dir(original_dir, backup_dir, original_dir_found):
         # Delete original_dir if a backup exists
         if original_dir_is_dir and os.path.isdir(backup_dir):
             utils.rmtree(original_dir)
-    else:
-        # Delete the created original_dir.
-        # There's no backup because it never existed
-        if original_dir_is_dir:
-            utils.rmtree(original_dir)
+    elif original_dir_is_dir:
+        utils.rmtree(original_dir)
 
     # Restore the user's default original_dir contents
     if os.path.isdir(backup_dir):

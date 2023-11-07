@@ -56,18 +56,16 @@ def apply_overwrites_to_context(context, overwrite_context):
         context_value = context[variable]
 
         if isinstance(context_value, list):
-            # We are dealing with a choice variable
-            if overwrite in context_value:
-                # This overwrite is actually valid for the given context
-                # Let's set it as default (by definition first item in list)
-                # see ``cookiecutter.prompt.prompt_choice_for_config``
-                context_value.remove(overwrite)
-                context_value.insert(0, overwrite)
-            else:
+            if overwrite not in context_value:
                 raise ValueError(
                     f"{overwrite} provided for choice variable {variable}, "
                     f"but the choices are {context_value}."
                 )
+            # This overwrite is actually valid for the given context
+            # Let's set it as default (by definition first item in list)
+            # see ``cookiecutter.prompt.prompt_choice_for_config``
+            context_value.remove(overwrite)
+            context_value.insert(0, overwrite)
         elif isinstance(context_value, dict) and isinstance(overwrite, dict):
             # Partially overwrite some keys in original dict
             apply_overwrites_to_context(context_value, overwrite)
@@ -151,8 +149,7 @@ def generate_file(project_dir, infile, context, env, skip_if_file_exists=False):
     outfile_tmpl = env.from_string(infile)
 
     outfile = os.path.join(project_dir, outfile_tmpl.render(**context))
-    file_name_is_empty = os.path.isdir(outfile)
-    if file_name_is_empty:
+    if file_name_is_empty := os.path.isdir(outfile):
         logger.debug('The resulting file name is empty: %s', outfile)
         return
 

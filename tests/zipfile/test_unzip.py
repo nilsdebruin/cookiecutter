@@ -12,20 +12,16 @@ from cookiecutter.exceptions import InvalidZipRepository
 def mock_download():
     """Fake download function."""
     with Path('tests/files/fake-repo-tmpl.zip').open('rb') as zf:
-        chunk = zf.read(1024)
-        while chunk:
+        while chunk := zf.read(1024):
             yield chunk
-            chunk = zf.read(1024)
 
 
 def mock_download_with_empty_chunks():
     """Fake download function."""
     yield
     with Path('tests/files/fake-repo-tmpl.zip').open('rb') as zf:
-        chunk = zf.read(1024)
-        while chunk:
+        while chunk := zf.read(1024):
             yield chunk
-            chunk = zf.read(1024)
 
 
 def test_unzip_local_file(mocker, clone_dir):
